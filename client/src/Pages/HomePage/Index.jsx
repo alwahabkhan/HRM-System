@@ -6,7 +6,6 @@ import { Grid, Typography, Button, TextField } from "@mui/material";
 import landingimage from "../../Assets/landing_image.jpeg";
 import whyImage from "../../Assets/whyus.jpg";
 import aboutImage from "../../Assets/aboutus.jpg";
-// import contactImage from "../../Assets/contact_us_image.jpeg";
 import "@fontsource/outfit";
 
 function Index() {
@@ -41,7 +40,7 @@ function Index() {
               sx={{
                 fontFamily: "outfit",
                 fontSize: "40px",
-                color: "#000080",
+                color: "#176CC7",
                 fontWeight: "900",
               }}
             >
@@ -62,7 +61,7 @@ function Index() {
               variant="contained"
               sx={{
                 marginTop: "20px",
-                backgroundColor: "#000080",
+                // backgroundColor: "#000080",
                 borderRadius: "20px",
                 fontFamily: "outfit",
               }}
@@ -87,7 +86,7 @@ function Index() {
           id="why-us"
           sx={{
             display: "flex",
-            minHeight: "80vh",
+            minHeight: "70vh",
             paddingX: "150px",
             alignItems: "center",
           }}
@@ -123,7 +122,7 @@ function Index() {
               sx={{
                 fontFamily: "outfit",
                 fontSize: "40px",
-                color: "#000080",
+                color: "#176CC7",
                 fontWeight: "900",
               }}
             >
@@ -147,7 +146,7 @@ function Index() {
           id="about-us"
           sx={{
             display: "flex",
-            minHeight: "80vh",
+            minHeight: "70vh",
             paddingX: "150px",
             alignItems: "center",
           }}
@@ -165,7 +164,7 @@ function Index() {
               sx={{
                 fontFamily: "outfit",
                 fontSize: "40px",
-                color: "#000080",
+                color: "#176CC7",
                 fontWeight: "900",
               }}
             >
@@ -210,7 +209,7 @@ function Index() {
           sx={{
             display: "flex",
             flexDirection: { xs: "column", sm: "row" },
-            minHeight: "80vh",
+            minHeight: "70vh",
             paddingX: "150px",
             alignItems: "center",
           }}
@@ -253,7 +252,7 @@ function Index() {
                 variant="contained"
                 sx={{
                   marginTop: "20px",
-                  backgroundColor: "#000080",
+
                   borderRadius: "20px",
                   fontFamily: "outfit",
                 }}
@@ -275,7 +274,7 @@ function Index() {
               sx={{
                 fontFamily: "outfit",
                 fontSize: "40px",
-                color: "#000080",
+                color: "#176CC7",
                 fontWeight: "900",
                 marginBottom: "20px",
               }}

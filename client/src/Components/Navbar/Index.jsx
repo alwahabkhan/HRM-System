@@ -77,7 +77,7 @@ const Index = ({ setShowLogin }) => {
               justifyContent: "center",
             }}
           >
-            {["home", "Why-us", "about-us", "contact-us"].map((item) => (
+            {["home", "why-us", "about-us", "contact-us"].map((item) => (
               <Typography
                 key={item}
                 sx={{
@@ -115,11 +115,10 @@ const Index = ({ setShowLogin }) => {
             }}
           >
             <Button
-              onClick={() => setShowLogin(true)}
+              variant="contained"
+              onClick={() => navigate("/Login")}
               sx={{
-                backgroundColor: "#000080",
-                border: "1px solid #000080",
-                color: "white",
+
                 borderRadius: "20px",
                 fontFamily: "outfit",
                 paddingX: "20px",
