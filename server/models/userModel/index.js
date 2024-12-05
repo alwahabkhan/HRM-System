@@ -21,8 +21,12 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  dateofbirth: {
+  role: {
     type: String,
+    required: true,
+  },
+  dateofbirth: {
+    type: Date,
     required: true,
   },
 });

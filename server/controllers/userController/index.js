@@ -8,11 +8,15 @@ const createToken = (user) => {
 };
 
 const registerUser = async (req, res) => {
-  const { fullName, email, password, age, gender, dateofbirth } = req.body;
+  const { fullName, email, password, age, gender, role, dateofbirth } = req.body;
+
   try {
     const emailExist = await userModel.findOne({ email });
     if (emailExist) {
       return res.json({ success: false, message: "Email Already Exists" });
+    }
+    if (role != "Admin" && role != "User") {
+      res.json({ success: false, message: "Role should be Admin or User" })
     }
 
     if (!validator.isEmail(email)) {
@@ -33,6 +37,7 @@ const registerUser = async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, salt);
 
     const newUser = new userModel({
+      role: role,
       fullName: fullName,
       email: email,
       password: hashedPassword,
@@ -46,7 +51,7 @@ const registerUser = async (req, res) => {
     return res.json({ success: true, token });
   } catch (error) {
     console.log("Error");
-    return res.json({ success: false, message: error });
+    return res.json({ success: false, message: error.message });
   }
 };
 

@@ -3,6 +3,7 @@ import { Typography, Grid, Button, TextField, FormGroup, } from "@mui/material";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import LoginImage from "../../Assets/login.jpg"
+import { toast } from 'react-toastify'
 import "@fontsource/outfit";
 
 function Index() {
@@ -21,14 +22,15 @@ function Index() {
                 {
                     headers: {
                         "Content-Type": "application/json",
-                        // Authorization: `Bearer ${localStorage.getItem("token")}`,
                     },
                 }
             );
             if (response.data.success) {
+                toast.success("Logged-In Successfully")
                 localStorage.setItem("token", response.data.token);
-                navigate("/mainpage");
+                navigate("/dashboard");
             } else {
+                toast.error(response.data.message)
                 console.log("Error: ", response.data.message);
             }
         } catch (error) {

@@ -8,6 +8,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { toast } from 'react-toastify';
 
 
 const theme = createTheme({
@@ -29,9 +30,11 @@ const theme = createTheme({
     },
 });
 
+
 function Index() {
     const [data, setData] = useState({
-        fullname: "",
+        role: "",
+        fullName: "",
         email: "",
         password: "",
         age: "",
@@ -45,23 +48,22 @@ function Index() {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-
         console.log("Request Data:", data);
-
 
         if (data.dateofbirth) {
             data.dateofbirth = data.dateofbirth.toISOString();
         }
-
 
         try {
             const response = await axios.post("http://localhost:8000/api/user/register", data)
                 .then((res) => {
                     console.log(res);
                     if (res.data.success === true) {
+                        toast.success("Register Successfully")
                         navigate("/login");
                         localStorage.setItem("token", response.data.token);
                     } else {
+                        toast.error(res.data.message)
                         console.log("Error: ", res.data.message);
                     }
                 });
@@ -94,9 +96,6 @@ function Index() {
                 marginX: "100px"
             }}
         >
-
-
-
             <Grid
                 xs="6"
                 sm="6"
@@ -208,15 +207,11 @@ function Index() {
                             </FormGroup>
                             <Box sx={{
                                 display: "flex",
-                                justifyContent: "space-between"
-
+                                justifyContent: "space-between",
+                                gap: "20px"
                             }}>
 
-                                <FormGroup className="mb-4" sx={
-                                    {
-                                        marginRight: "10px",
-                                    }
-                                }>
+                                <FormGroup className="mb-4">
                                     <Typography style={{ fontSize: "14px", color: "#555", fontFamily: "outfit", }}>
                                         Age
                                     </Typography>
@@ -242,21 +237,19 @@ function Index() {
                                         }}
                                     />
                                 </FormGroup>
-                                <FormGroup className="mb-4" sx={{
-                                    marginLeft: "10px",
-                                }}>
+                                <FormGroup className="mb-4" >
                                     <Typography style={{ fontSize: "14px", color: "#555", fontFamily: "outfit", }}>
                                         Gender
                                     </Typography>
                                     <TextField
-                                        type="gender"
+                                        type="text"
                                         name='gender'
                                         placeholder="Enter Gender"
                                         value={data.gender}
                                         onChange={onChangeHandler}
                                         size='small'
                                         sx={{
-
+                                            width: "100%",
                                             marginY: "10px",
                                             fontFamily: "outfit",
                                             "& .MuiInputBase-input": {
@@ -271,42 +264,74 @@ function Index() {
                                     />
                                 </FormGroup>
                             </Box>
-                            <FormGroup className="mb-4">
-                                <Typography style={{ fontSize: "14px", color: "#555", fontFamily: "outfit", marginBottom: "10px", }}>
-                                    Date of Birth
-                                </Typography>
-                                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                    <DatePicker
-                                        value={data.dateofbirth || null}
-                                        onChange={(newValue) => setData((prev) => ({ ...prev, dateofbirth: newValue }))}
-                                        renderInput={(params) => (
-                                            <TextField
-                                                {...params}
-                                                size="small"
-                                                sx={{
-                                                    marginY: "10px",
-                                                    "& .MuiInputBase-root": {
-                                                        fontSize: "14px !important",
-                                                        height: "36px !important",
-                                                    },
-                                                    "& .MuiOutlinedInput-root": {
-                                                        fontSize: "14px !important",
-                                                        height: "36px !important",
-                                                        padding: "0 !important",
-                                                    },
-                                                    "& .MuiInputBase-input": {
-                                                        fontSize: "14px !important",
-                                                        padding: "6px 12px !important",
-                                                    },
-                                                    "& .MuiInputLabel-root": {
-                                                        fontSize: "14px !important",
-                                                    },
-                                                }}
-                                            />
-                                        )}
+                            <Box sx={{
+                                display: "flex",
+                                justifyContent: "space-between",
+                                gap: "20px"
+                            }}>
+                                <FormGroup className="mb-4">
+                                    <Typography style={{ fontSize: "14px", color: "#555", fontFamily: "outfit", }}>
+                                        Role
+                                    </Typography>
+                                    <TextField
+                                        type="text"
+                                        name='role'
+                                        value={data.role}
+                                        placeholder="Enter Role e.g(User or Admin)"
+                                        onChange={onChangeHandler}
+                                        size='small'
+                                        sx={{
+                                            marginY: "10px",
+                                            fontFamily: "outfit",
+                                            "& .MuiInputBase-input": {
+                                                fontFamily: "'Outfit', sans-serif",
+                                                fontSize: "14px",
+                                            },
+                                            "& .MuiInputLabel-root": {
+                                                fontFamily: "'Outfit', sans-serif",
+                                                fontSize: "14px",
+                                            },
+                                        }}
                                     />
-                                </LocalizationProvider>
-                            </FormGroup>
+                                </FormGroup>
+
+                                <FormGroup className="mb-4">
+                                    <Typography style={{ fontSize: "14px", color: "#555", fontFamily: "outfit", marginBottom: "10px", }}>
+                                        Date of Birth
+                                    </Typography>
+                                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                        <DatePicker
+                                            value={data.dateofbirth || null}
+                                            onChange={(newValue) => setData((prev) => ({ ...prev, dateofbirth: newValue }))}
+                                            renderInput={(params) => (
+                                                <TextField
+                                                    {...params}
+                                                    size="small"
+                                                    sx={{
+                                                        marginY: "10px",
+                                                        "& .MuiInputBase-root": {
+                                                            fontSize: "14px !important",
+                                                            height: "36px !important",
+                                                        },
+                                                        "& .MuiOutlinedInput-root": {
+                                                            fontSize: "14px !important",
+                                                            height: "36px !important",
+                                                            padding: "0 !important",
+                                                        },
+                                                        "& .MuiInputBase-input": {
+                                                            fontSize: "14px !important",
+                                                            padding: "6px 12px !important",
+                                                        },
+                                                        "& .MuiInputLabel-root": {
+                                                            fontSize: "14px !important",
+                                                        },
+                                                    }}
+                                                />
+                                            )}
+                                        />
+                                    </LocalizationProvider>
+                                </FormGroup>
+                            </Box>
 
 
                             <Button
@@ -358,6 +383,7 @@ function Index() {
                     width: "675px"
                 }} />
             </Grid>
+
         </Grid>
     )
 }
