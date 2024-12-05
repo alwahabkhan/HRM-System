@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Typography, Grid, Button, Checkbox, TextField, Box, FormControl, FormGroup, FormLabel } from "@mui/material";
+import { Typography, Grid, Button, TextField, FormGroup, } from "@mui/material";
 import axios from "axios";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import LoginImage from "../../Assets/login.jpg"
 import "@fontsource/outfit";
 
@@ -12,33 +12,40 @@ function Index() {
     });
     const navigate = useNavigate();
 
-
-
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = axios.post("http://localhost:8000/api/user/login", {
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${localStorage.getItem("token")}`,
-                },
-                data
-            })
-            console.log(response);
-
-            localStorage.setItem("token", response.data.token);
+            const response = await axios.post(
+                "http://localhost:8000/api/user/login",
+                data,
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                        // Authorization: `Bearer ${localStorage.getItem("token")}`,
+                    },
+                }
+            );
+            if (response.data.success) {
+                localStorage.setItem("token", response.data.token);
+                navigate("/mainpage");
+            } else {
+                console.log("Error: ", response.data.message);
+            }
         } catch (error) {
-            console.log(error.message);
-
+            console.log("Login Error: ", error.response?.data?.message || error.message);
         }
+    };
 
-    }
 
     const onChangeHandler = (event) => {
         const name = event.target.name;
         const value = event.target.value;
         setData((data) => ({ ...data, [name]: value }))
     }
+
+    useEffect(() => {
+        console.log(data)
+    }, [data])
     return (
         <Grid
             component="main"
@@ -97,7 +104,7 @@ function Index() {
                             </Typography>
                             <TextField
                                 type="email"
-
+                                name='email'
                                 placeholder="Enter email"
                                 onChange={onChangeHandler}
                                 size='small'
@@ -121,6 +128,7 @@ function Index() {
                             </Typography>
                             <TextField
                                 type="password"
+                                name='password'
                                 placeholder="Enter password"
                                 onChange={onChangeHandler}
                                 size='small'
@@ -165,7 +173,7 @@ function Index() {
                             <Button
                                 onClick={() => navigate("/register")}
                                 type="button"
-                                variant="text"
+                                variant="outlined"
                                 sx={{
                                     fontFamily: "outfit",
                                 }}

@@ -3,8 +3,8 @@ import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import validator from "validator";
 
-const createToken = (id) => {
-  return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: "30d" });
+const createToken = (user) => {
+  return jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "30d" });
 };
 
 const registerUser = async (req, res) => {
@@ -42,11 +42,11 @@ const registerUser = async (req, res) => {
     });
 
     const user = await newUser.save();
-    const token = createToken(user._id);
+    const token = createToken(user);
     return res.json({ success: true, token });
   } catch (error) {
     console.log("Error");
-    return res.json({ success: false, message: "Error" });
+    return res.json({ success: false, message: error });
   }
 };
 
@@ -61,10 +61,10 @@ const loginUser = async (req, res) => {
     if (!isMatch) {
       return res.json({ success: false, message: "Invalid Crediantials" });
     }
-    const token = createToken(user._id);
+    const token = createToken(user);
     return res.json({ success: true, token });
   } catch (error) {
-    return res.json({ success: false, message: "Error" });
+    return res.json({ success: false, message: error });
   }
 };
 

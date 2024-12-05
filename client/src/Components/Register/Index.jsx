@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Typography, Grid, Button, TextField, FormGroup, Box } from "@mui/material";
 import axios from "axios";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Register from "../../Assets/signup.jpg"
 import "@fontsource/outfit";
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -31,9 +31,12 @@ const theme = createTheme({
 
 function Index() {
     const [data, setData] = useState({
+        fullname: "",
         email: "",
         password: "",
-        dateOfBirth: null,
+        age: "",
+        gender: "",
+        dateofbirth: "",
     });
     const navigate = useNavigate();
 
@@ -41,29 +44,43 @@ function Index() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        try {
-            const response = axios.post("http://localhost:8000/api/user/login", {
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${localStorage.getItem("token")}`,
-                },
-                data
-            })
-            console.log(response);
 
-            localStorage.setItem("token", response.data.token);
-        } catch (error) {
-            console.log(error.message);
 
+        console.log("Request Data:", data);
+
+
+        if (data.dateofbirth) {
+            data.dateofbirth = data.dateofbirth.toISOString();
         }
 
-    }
+
+        try {
+            const response = await axios.post("http://localhost:8000/api/user/register", data)
+                .then((res) => {
+                    console.log(res);
+                    if (res.data.success === true) {
+                        navigate("/login");
+                        localStorage.setItem("token", response.data.token);
+                    } else {
+                        console.log("Error: ", res.data.message);
+                    }
+                });
+            console.log(response);
+        } catch (error) {
+            console.log(error.message);
+        }
+    };
 
     const onChangeHandler = (event) => {
         const name = event.target.name;
         const value = event.target.value;
         setData((data) => ({ ...data, [name]: value }))
     }
+
+    useEffect(() => {
+        console.log(data);
+
+    }, [data])
     return (
 
         <Grid
@@ -116,8 +133,9 @@ function Index() {
                                     Full Name
                                 </Typography>
                                 <TextField
-                                    type="fullname"
-
+                                    type="text"
+                                    name='fullName'
+                                    value={data.fullName}
                                     placeholder="Enter Full Name"
                                     onChange={onChangeHandler}
                                     size='small'
@@ -141,7 +159,8 @@ function Index() {
                                 </Typography>
                                 <TextField
                                     type="email"
-
+                                    name='email'
+                                    value={data.email}
                                     placeholder="Enter email"
                                     onChange={onChangeHandler}
                                     size='small'
@@ -167,7 +186,9 @@ function Index() {
                                 </Typography>
                                 <TextField
                                     type="password"
+                                    name='password'
                                     placeholder="Enter password"
+                                    value={data.password}
                                     onChange={onChangeHandler}
                                     size='small'
                                     sx={{
@@ -201,6 +222,8 @@ function Index() {
                                     </Typography>
                                     <TextField
                                         type="age"
+                                        value={data.age}
+                                        name='age'
                                         placeholder="Enter Age"
                                         onChange={onChangeHandler}
                                         size='small'
@@ -227,7 +250,9 @@ function Index() {
                                     </Typography>
                                     <TextField
                                         type="gender"
+                                        name='gender'
                                         placeholder="Enter Gender"
+                                        value={data.gender}
                                         onChange={onChangeHandler}
                                         size='small'
                                         sx={{
@@ -247,13 +272,13 @@ function Index() {
                                 </FormGroup>
                             </Box>
                             <FormGroup className="mb-4">
-                                <Typography style={{ fontSize: "14px", color: "#555", fontFamily: "outfit" }}>
+                                <Typography style={{ fontSize: "14px", color: "#555", fontFamily: "outfit", marginBottom: "10px", }}>
                                     Date of Birth
                                 </Typography>
                                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                                     <DatePicker
-                                        value={data.dateOfBirth || null}
-                                        onChange={(newValue) => setData((prev) => ({ ...prev, dateOfBirth: newValue }))}
+                                        value={data.dateofbirth || null}
+                                        onChange={(newValue) => setData((prev) => ({ ...prev, dateofbirth: newValue }))}
                                         renderInput={(params) => (
                                             <TextField
                                                 {...params}
@@ -262,16 +287,16 @@ function Index() {
                                                     marginY: "10px",
                                                     "& .MuiInputBase-root": {
                                                         fontSize: "14px !important",
-                                                        height: "36px !important", // Force smaller height
+                                                        height: "36px !important",
                                                     },
                                                     "& .MuiOutlinedInput-root": {
                                                         fontSize: "14px !important",
-                                                        height: "36px !important", // Enforce smaller size
-                                                        padding: "0 !important", // Remove default padding
+                                                        height: "36px !important",
+                                                        padding: "0 !important",
                                                     },
                                                     "& .MuiInputBase-input": {
                                                         fontSize: "14px !important",
-                                                        padding: "6px 12px !important", // Adjust for smaller input
+                                                        padding: "6px 12px !important",
                                                     },
                                                     "& .MuiInputLabel-root": {
                                                         fontSize: "14px !important",
@@ -311,7 +336,7 @@ function Index() {
                                 <Button
                                     onClick={() => navigate("/login")}
                                     type="button"
-                                    variant="text"
+                                    variant="outlined"
                                     sx={{
                                         fontFamily: "outfit",
                                     }}
