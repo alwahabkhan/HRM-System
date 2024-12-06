@@ -37,12 +37,12 @@ const registerUser = async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, salt);
 
     const newUser = new userModel({
-      role: role,
       fullName: fullName,
       email: email,
       password: hashedPassword,
       age: age,
       gender: gender,
+      role: role,
       dateofbirth: dateofbirth,
     });
 
@@ -67,7 +67,7 @@ const loginUser = async (req, res) => {
       return res.json({ success: false, message: "Invalid Crediantials" });
     }
     const token = createToken(user);
-    return res.json({ success: true, token });
+    return res.json({ success: true, token, role: user.role });
   } catch (error) {
     return res.json({ success: false, message: error });
   }

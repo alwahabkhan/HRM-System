@@ -26,9 +26,17 @@ function Index() {
                 }
             );
             if (response.data.success) {
-                toast.success("Logged-In Successfully")
+                console.log("Response:", response.data);
+                const userRole = response.data.role;
                 localStorage.setItem("token", response.data.token);
-                navigate("/dashboard");
+                if (userRole === "Admin") {
+                    navigate("/admin-dashboard")
+                    toast.success("Logged-In Successfully")
+                }
+                else if (userRole === "User") {
+                    navigate("/user-dashboard")
+                    toast.success("Logged-In Successfully")
+                }
             } else {
                 toast.error(response.data.message)
                 console.log("Error: ", response.data.message);
@@ -66,7 +74,7 @@ function Index() {
                 md="6"
                 lg="6"
             >
-                <img src={LoginImage} alt='login Image' style={{
+                <img src={LoginImage} alt='login logo' style={{
                     width: "675px"
                 }} />
             </Grid>

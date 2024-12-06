@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Typography, Grid, Button, TextField, FormGroup, Box } from "@mui/material";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -9,6 +9,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { toast } from 'react-toastify';
+import dayjs from 'dayjs';
 
 
 const theme = createTheme({
@@ -39,10 +40,10 @@ function Index() {
         password: "",
         age: "",
         gender: "",
-        dateofbirth: "",
+        dateofbirth: null,
     });
     const navigate = useNavigate();
-
+    const [secretkey, setSecretKey] = useState("")
 
 
     const handleSubmit = async (e) => {
@@ -50,8 +51,17 @@ function Index() {
 
         console.log("Request Data:", data);
 
-        if (data.dateofbirth) {
-            data.dateofbirth = data.dateofbirth.toISOString();
+        if (data.dateofbirth && dayjs(data.dateofbirth).isValid()) {
+            data.dateofbirth = dayjs(data.dateofbirth).toISOString();
+        } else {
+            toast.error("Invalid date of birth");
+            return;
+        }
+
+
+        if (data.role === "Admin" && secretkey !== "112233") {
+            toast.error("Invalid Secret Key ")
+            return;
         }
 
         try {
@@ -79,10 +89,7 @@ function Index() {
         setData((data) => ({ ...data, [name]: value }))
     }
 
-    useEffect(() => {
-        console.log(data);
 
-    }, [data])
     return (
 
         <Grid
@@ -152,62 +159,70 @@ function Index() {
                                     }}
                                 />
                             </FormGroup>
-                            <FormGroup className="mb-4">
-                                <Typography style={{ fontSize: "14px", color: "#555", fontFamily: "outfit", }}>
-                                    Email address
-                                </Typography>
-                                <TextField
-                                    type="email"
-                                    name='email'
-                                    value={data.email}
-                                    placeholder="Enter email"
-                                    onChange={onChangeHandler}
-                                    size='small'
-                                    sx={{
-                                        marginY: "10px",
-                                        fontFamily: "outfit",
-                                        "& .MuiInputBase-input": {
-                                            fontFamily: "'Outfit', sans-serif",
-                                            fontSize: "14px",
-                                        },
-                                        "& .MuiInputLabel-root": {
-                                            fontFamily: "'Outfit', sans-serif",
-                                            fontSize: "14px",
-                                        },
-                                    }}
-                                />
-                            </FormGroup>
-
-
-                            <FormGroup className="mb-4">
-                                <Typography style={{ fontSize: "14px", color: "#555", fontFamily: "outfit", }}>
-                                    Password
-                                </Typography>
-                                <TextField
-                                    type="password"
-                                    name='password'
-                                    placeholder="Enter password"
-                                    value={data.password}
-                                    onChange={onChangeHandler}
-                                    size='small'
-                                    sx={{
-                                        marginY: "10px",
-                                        fontFamily: "outfit",
-                                        "& .MuiInputBase-input": {
-                                            fontFamily: "'Outfit', sans-serif",
-                                            fontSize: "14px",
-                                        },
-                                        "& .MuiInputLabel-root": {
-                                            fontFamily: "'Outfit', sans-serif",
-                                            fontSize: "14px",
-                                        },
-                                    }}
-                                />
-
-                            </FormGroup>
                             <Box sx={{
                                 display: "flex",
-                                justifyContent: "space-between",
+                                justifyContent: "",
+                                gap: "20px"
+
+                            }}>
+                                <FormGroup className="mb-4">
+                                    <Typography style={{ fontSize: "14px", color: "#555", fontFamily: "outfit", }}>
+                                        Email address
+                                    </Typography>
+                                    <TextField
+                                        type="email"
+                                        name='email'
+                                        value={data.email}
+                                        placeholder="Enter email"
+                                        onChange={onChangeHandler}
+                                        size='small'
+                                        sx={{
+                                            marginY: "10px",
+                                            fontFamily: "outfit",
+                                            "& .MuiInputBase-input": {
+                                                fontFamily: "'Outfit', sans-serif",
+                                                fontSize: "14px",
+                                            },
+                                            "& .MuiInputLabel-root": {
+                                                fontFamily: "'Outfit', sans-serif",
+                                                fontSize: "14px",
+                                            },
+                                        }}
+                                    />
+                                </FormGroup>
+
+
+                                <FormGroup className="mb-4">
+                                    <Typography style={{ fontSize: "14px", color: "#555", fontFamily: "outfit", }}>
+                                        Password
+                                    </Typography>
+                                    <TextField
+                                        type="password"
+                                        name='password'
+                                        placeholder="Enter password"
+                                        value={data.password}
+                                        onChange={onChangeHandler}
+                                        size='small'
+                                        sx={{
+                                            marginY: "10px",
+                                            width: "100%",
+                                            fontFamily: "outfit",
+                                            "& .MuiInputBase-input": {
+                                                fontFamily: "'Outfit', sans-serif",
+                                                fontSize: "14px",
+                                            },
+                                            "& .MuiInputLabel-root": {
+                                                fontFamily: "'Outfit', sans-serif",
+                                                fontSize: "14px",
+                                            },
+                                        }}
+                                    />
+
+                                </FormGroup>
+
+                            </Box>
+                            <Box sx={{
+                                display: "flex",
                                 gap: "20px"
                             }}>
 
@@ -225,7 +240,7 @@ function Index() {
                                         sx={{
                                             marginY: "10px",
                                             fontFamily: "outfit",
-
+                                            width: "100%",
                                             "& .MuiInputBase-input": {
                                                 fontFamily: "'Outfit', sans-serif",
                                                 fontSize: "14px",
@@ -282,6 +297,7 @@ function Index() {
                                         size='small'
                                         sx={{
                                             marginY: "10px",
+                                            width: "100%",
                                             fontFamily: "outfit",
                                             "& .MuiInputBase-input": {
                                                 fontFamily: "'Outfit', sans-serif",
@@ -301,8 +317,10 @@ function Index() {
                                     </Typography>
                                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                                         <DatePicker
-                                            value={data.dateofbirth || null}
-                                            onChange={(newValue) => setData((prev) => ({ ...prev, dateofbirth: newValue }))}
+                                            value={data.dateofbirth ? dayjs(data.dateofbirth) : null}
+                                            onChange={(newValue) =>
+                                                setData((prev) => ({ ...prev, dateofbirth: newValue }))
+                                            }
                                             renderInput={(params) => (
                                                 <TextField
                                                     {...params}
@@ -310,29 +328,48 @@ function Index() {
                                                     sx={{
                                                         marginY: "10px",
                                                         "& .MuiInputBase-root": {
-                                                            fontSize: "14px !important",
-                                                            height: "36px !important",
-                                                        },
-                                                        "& .MuiOutlinedInput-root": {
-                                                            fontSize: "14px !important",
-                                                            height: "36px !important",
-                                                            padding: "0 !important",
-                                                        },
-                                                        "& .MuiInputBase-input": {
-                                                            fontSize: "14px !important",
-                                                            padding: "6px 12px !important",
-                                                        },
-                                                        "& .MuiInputLabel-root": {
-                                                            fontSize: "14px !important",
+                                                            fontSize: "14px",
+                                                            height: "36px",
                                                         },
                                                     }}
                                                 />
                                             )}
                                         />
                                     </LocalizationProvider>
+
                                 </FormGroup>
                             </Box>
-
+                            {data.role === "Admin" && (
+                                <FormGroup sx={{ marginBottom: "10px" }}>
+                                    <Typography
+                                        style={{
+                                            fontSize: "14px",
+                                            color: "#555",
+                                            fontFamily: "outfit",
+                                        }}
+                                    >
+                                        Secret Key
+                                    </Typography>
+                                    <TextField
+                                        type="text"
+                                        name="secretKey"
+                                        placeholder="Enter Secret Key"
+                                        onChange={(e) => setSecretKey(e.target.value)}
+                                        size="small"
+                                        sx={{
+                                            fontFamily: "outfit",
+                                            "& .MuiInputBase-input": {
+                                                fontFamily: "'Outfit', sans-serif",
+                                                fontSize: "14px",
+                                            },
+                                            "& .MuiInputLabel-root": {
+                                                fontFamily: "'Outfit', sans-serif",
+                                                fontSize: "14px",
+                                            },
+                                        }}
+                                    />
+                                </FormGroup>
+                            )}
 
                             <Button
                                 variant="contained"
@@ -379,7 +416,7 @@ function Index() {
                 md="6"
                 lg="6"
             >
-                <img src={Register} alt='login Image' style={{
+                <img src={Register} alt='login logo' style={{
                     width: "675px"
                 }} />
             </Grid>

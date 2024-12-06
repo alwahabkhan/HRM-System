@@ -1,10 +1,9 @@
 import React from 'react'
 
-
 function Index() {
     return (
         <div>
-            Dashboard Page
+            Admin Dashboard
         </div>
     )
 }
