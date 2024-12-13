@@ -1,4 +1,4 @@
-import employeeModel from "../../models/employeeModel";
+import employeeModel from "../../models/employeeModel/index.js";
 
 const handleAddEmployee = async (req, res) => {
     const { name, email, position, department, hireDate, salary, status } = req.body;
@@ -6,7 +6,7 @@ const handleAddEmployee = async (req, res) => {
         const newEmployee = new employeeModel({
             name: name,
             email: email,
-            positon: position,
+            position: position,
             department: department,
             hireDate: hireDate,
             salary: salary,
@@ -19,3 +19,5 @@ const handleAddEmployee = async (req, res) => {
         res.json({ success: false, message: error.message })
     }
 }
+
+export { handleAddEmployee}
