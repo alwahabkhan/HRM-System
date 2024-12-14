@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-import userModel from './../userModel/index';
 
 const employeeSchema = new mongoose.Schema({
     name: {
@@ -32,6 +31,6 @@ const employeeSchema = new mongoose.Schema({
     }
 })
 
-const employeeModel = new mongoose.model("employee", employeeSchema);
+const employeeModel = mongoose.model.employees || mongoose.model("employee", employeeSchema);
 
 export default employeeModel;
