@@ -1,8 +1,12 @@
 import express from "express";
-import { handleAddEmployee } from "../../controllers/employeeController/index.js";
+import { handleAddEmployee, handleUpdateEmployee, handleDeleteEmployee } from "../../controllers/employeeController/index.js";
 
-const employeeRouter = new express.Router();
+const emplpoyeeRouter = new express.Router();
 
-employeeRouter.post("/addEmployee", handleAddEmployee)  
+emplpoyeeRouter.post("/addEmployee", handleAddEmployee);
 
-export default employeeRouter;
+emplpoyeeRouter.put("/updateEmployee/:id", handleUpdateEmployee)
+
+emplpoyeeRouter.delete("/deleteEmployee/:id", handleDeleteEmployee)
+
+export default emplpoyeeRouter;
